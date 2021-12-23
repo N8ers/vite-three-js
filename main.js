@@ -1,6 +1,9 @@
 import * as THREE from "three";
 
 const scene = new THREE.Scene();
+const gridHelper = new THREE.GridHelper(10, 10, 0xaec6cf, 0xaec6cf);
+scene.add(gridHelper);
+
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -17,7 +20,8 @@ const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-camera.position.z = 5;
+camera.position.z = 10;
+camera.position.y = 2;
 
 function animate() {
   requestAnimationFrame(animate);
