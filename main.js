@@ -15,6 +15,9 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector("#bg"),
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
+camera.position.setZ(30);
+camera.position.setX(-3);
+
 document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.BoxGeometry();
