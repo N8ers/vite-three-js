@@ -1,47 +1,43 @@
 import * as THREE from "three";
 
+// scene, camera, renderer
 const scene = new THREE.Scene();
-const gridHelper = new THREE.GridHelper(10, 10, 0xaec6cf, 0xaec6cf);
-scene.add(gridHelper);
 
 const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
+  75, // field of view (of 360 degs)
+  window.innerWidth / window.innerHeight, // aspect ratio (browser window)
+  0.1, // view frustum
+  1000 // view frustum
 );
 
-const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGL1Renderer({
   canvas: document.querySelector("#bg"),
 });
-renderer.setSize(window.innerWidth, window.innerHeight);
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight); // full screen canvas
+
+// default camera position is the middle of the screen, so we want to zoom out on the Z axis
 camera.position.setZ(30);
-camera.position.setX(-3);
 
-document.body.appendChild(renderer.domElement);
+renderer.render(scene, camera);
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-camera.position.z = 10;
-camera.position.y = 2;
-
-function moveCamera() {
-  const top = document.body.getBoundingClientRect().top;
-  camera.position.z = top * -0.1;
-  camera.position.x = top * -0.002;
-  camera.rotation.y = top * -0.0025;
-}
-
-document.body.onscroll = moveCamera;
-moveCamera();
+const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff6347,
+  wireframe: true,
+});
+const torus = new THREE.Mesh(geometry, material);
+scene.add(torus);
 
 function animate() {
   requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+
+  torus.rotation.x += 0.01;
+  torus.rotation.y += 0.005;
+  torus.rotation.z += 0.01;
+
   renderer.render(scene, camera);
 }
+
 animate();
