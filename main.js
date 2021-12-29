@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 // scene, camera, renderer
 const scene = new THREE.Scene();
 
@@ -22,13 +24,27 @@ camera.position.setZ(30);
 
 renderer.render(scene, camera);
 
+// SHAPES
 const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff6347,
-  wireframe: true,
-});
+const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
 const torus = new THREE.Mesh(geometry, material);
 scene.add(torus);
+
+// LIGHTING
+const pointLight = new THREE.PointLight(0xffffff); // white hex literal
+pointLight.position.set(10, 10, 10); // sets lighting position
+scene.add(pointLight);
+
+const ambientLight = new THREE.AmbientLight(0xffffff);
+
+scene.add(pointLight, ambientLight);
+
+// HELPERS
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
+const gridHelper = new THREE.GridHelper(200, 50);
+scene.add(pointLightHelper, gridHelper);
+
+const controls = new OrbitControls(camera, renderer.domElement);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -36,6 +52,8 @@ function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
+
+  controls.update();
 
   renderer.render(scene, camera);
 }
