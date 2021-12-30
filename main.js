@@ -21,6 +21,7 @@ renderer.setSize(window.innerWidth, window.innerHeight); // full screen canvas
 
 // default camera position is the middle of the screen, so we want to zoom out on the Z axis
 camera.position.setZ(30);
+camera.position.setX(-3);
 
 renderer.render(scene, camera);
 
@@ -84,6 +85,30 @@ const moon = new THREE.Mesh(
   })
 );
 scene.add(moon);
+
+moon.position.z = 30; // you can set position this way
+moon.position.setX(-10); // or set it with the function
+
+function moveCamera() {
+  const top = document.body.getBoundingClientRect().top;
+  // getBoundingClientRect will give us the dimentions of the view port
+  // then .top, will show us how far we are from the top of the page
+
+  moon.rotation.x += 0.05;
+  moon.rotation.y += 0.065;
+  moon.rotation.z += 0.05;
+
+  viteCube.rotation.y += 0.01;
+  viteCube.rotation.x += 0.01;
+
+  camera.position.z = top * -0.01;
+  camera.position.x = top * -0.009;
+  camera.position.y = top * -0.002;
+}
+
+// the event handler for scrolling
+document.body.onscroll = moveCamera;
+moveCamera();
 
 function animate() {
   requestAnimationFrame(animate);
